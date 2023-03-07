@@ -63,13 +63,12 @@ def main():
 
         for i in range(nums[0]):
             if int(classes[0][i]) == 16:
-                print('Dog')
                 
                 if not dog_pic_saved:
                     cv2.imwrite("data/images/saved_dog_pic.jpg", frame)
                     dog_pic_saved = True
 
-        cv2.imshow(win_name, img)
+        #cv2.imshow(win_name, img)
         stop = time.time()
 
         # Display the resulting frame
