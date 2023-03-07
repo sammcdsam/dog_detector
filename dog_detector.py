@@ -54,8 +54,13 @@ def main():
             max_output_size_per_class=max_output_size_per_class,
             iou_threshold=iou_threshold,
             confidence_threshold=confidence_threshold)
+                
         img = draw_outputs(frame, boxes, scores, classes, nums, class_names)
-        cv2.imshow(win_name, img)
+
+        for i in range(nums[0]):
+            if int(classes[0][i]) == 16:
+                print('Dog')
+                cv2.imshow(win_name, img)
         stop = time.time()
 
         # Display the resulting frame
