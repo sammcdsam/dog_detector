@@ -3,3 +3,7 @@ A dog detector built using YOLOV3  and Tensorflow in python. It looks for 2 dogs
 
 
 ![Monty in a bounding box with dog label](/data/images/dog_livestream.JPG)
+
+<p align="center">
+  <img src="/data/images/dog_livestream.JPG" />
+</p>
