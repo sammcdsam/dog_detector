@@ -24,6 +24,8 @@ confidence_threshold = 0.5
 cfgfile = 'model_data/yolov3.cfg'
 weightfile = 'weights/yolov3_weights.tf'
 
+
+
 def main():
 # define a video capture object
     vid = cv2.VideoCapture(0)
@@ -32,6 +34,8 @@ def main():
     class_names = load_class_names(class_name)
     win_name = 'Yolov3 detection'
     cv2.namedWindow(win_name)
+
+    dog_pic_saved = False
 
     frame_size = (vid.get(cv2.CAP_PROP_FRAME_WIDTH),
                   vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -60,7 +64,12 @@ def main():
         for i in range(nums[0]):
             if int(classes[0][i]) == 16:
                 print('Dog')
-                cv2.imshow(win_name, img)
+                
+                if not dog_pic_saved:
+                    cv2.imwrite("data/images/saved_dog_pic.jpg", frame)
+                    dog_pic_saved = True
+
+        cv2.imshow(win_name, img)
         stop = time.time()
 
         # Display the resulting frame
