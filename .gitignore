@@ -1,0 +1,7 @@
+data/output_images/saved_dog_pic.jpg
+.env
+classes.txt
+video.py
+weights/
+
+__pycache__/

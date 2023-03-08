@@ -38,10 +38,16 @@ def main():
     class_names = load_class_names(class_name)
 
     dog_pic_saved = False
+    dog_in_view = False
+    person_in_view = False
 
     frame_size = (vid.get(cv2.CAP_PROP_FRAME_WIDTH),
                   vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
-
+    
+    #initalize a video writer for debugging 
+    result = cv2.VideoWriter('filename.avi', 
+                         cv2.VideoWriter_fourcc(*'MJPG'),
+                         10, frame_size)
     
     #
     while(True):
@@ -50,8 +56,15 @@ def main():
         # by frame
         ret, frame = vid.read()
 
+        # frame is being over written with the bounding box. I dont want to see the bounding box
+        # so I am testing fixes right now
+        backup_frame = frame
+
         if not ret:
             break
+
+        dog_in_view = False
+        person_in_view = False
 
         #predict the objects in the frame and add output boxes to the image using the classes
         resized_frame = tf.expand_dims(frame, 0)
@@ -67,14 +80,19 @@ def main():
         img = draw_outputs(frame, boxes, scores, classes, nums, class_names)
 
         # instead of displaying the image on the screen save an image of the dog
-        # TODO: do save the image when a person is detected in the frame
+        # TODO: do NOT save the image when a person is detected in the frame
         # TODO: only save images that have both dogs detected
         for i in range(nums[0]):
             if int(classes[0][i]) == 16:
-                
-                #if not dog_pic_saved:
-                cv2.imwrite("data/output_images/saved_dog_pic.jpg", frame)
-                #dog_pic_saved = True
+                dog_in_view = True
+            if int(classes[0][i]) == 0:
+                person_in_view = True
+            
+        if dog_in_view and not person_in_view: 
+            #if not dog_pic_saved:
+            cv2.imwrite("data/output_images/saved_dog_pic.jpg", backup_frame)
+            result.write(frame)
+            #dog_pic_saved = True
 
 
         
@@ -90,10 +108,14 @@ def main():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
+    
     # After the loop release the cap object
     vid.release()
+    result.release()
     # Destroy all the windows
     cv2.destroyAllWindows()
+
+    print("Video Saved")
 
 if __name__ == '__main__':
     main()
