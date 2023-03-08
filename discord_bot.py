@@ -17,7 +17,7 @@ bot = commands.Bot(command_prefix="$", intents=intents)
 async def dog_detect(ctx):
 
     filepath = "data/output_images/saved_dog_pic.jpg"
-    response = "Here are the Dogs!"
+    response = "Here is the most recent picture of Maggie and Monty!"
     await ctx.send(response, file=discord.File(filepath))
 
 bot.run(TOKEN)

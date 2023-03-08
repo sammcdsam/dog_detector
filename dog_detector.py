@@ -72,9 +72,9 @@ def main():
         for i in range(nums[0]):
             if int(classes[0][i]) == 16:
                 
-                if not dog_pic_saved:
-                    cv2.imwrite("data/output_images/saved_dog_pic.jpg", frame)
-                    dog_pic_saved = True
+                #if not dog_pic_saved:
+                cv2.imwrite("data/output_images/saved_dog_pic.jpg", frame)
+                #dog_pic_saved = True
 
 
         
