@@ -27,19 +27,23 @@ weightfile = 'weights/yolov3_weights.tf'
 
 
 def main():
-# define a video capture object
+    # define a video capture object
     vid = cv2.VideoCapture(0)
+
+    #load the model, weights and classes
+    # TODO: Train a model on the difference in corgi color
+    # TODO: Maybe upgrade to YOLOv5 or a different object detection network.
     model = YOLOv3Net(cfgfile,model_size,num_classes)
     model.load_weights(weightfile)
     class_names = load_class_names(class_name)
-    win_name = 'Yolov3 detection'
-    cv2.namedWindow(win_name)
 
     dog_pic_saved = False
 
     frame_size = (vid.get(cv2.CAP_PROP_FRAME_WIDTH),
                   vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
+    
+    #
     while(True):
 
         # Capture the video frame
@@ -49,6 +53,7 @@ def main():
         if not ret:
             break
 
+        #predict the objects in the frame and add output boxes to the image using the classes
         resized_frame = tf.expand_dims(frame, 0)
         resized_frame = resize_image(resized_frame, (model_size[0],model_size[1]))
         pred = model.predict(resized_frame)
@@ -61,13 +66,18 @@ def main():
                 
         img = draw_outputs(frame, boxes, scores, classes, nums, class_names)
 
+        # instead of displaying the image on the screen save an image of the dog
+        # TODO: do save the image when a person is detected in the frame
+        # TODO: only save images that have both dogs detected
         for i in range(nums[0]):
             if int(classes[0][i]) == 16:
                 
                 if not dog_pic_saved:
-                    cv2.imwrite("data/images/saved_dog_pic.jpg", frame)
+                    cv2.imwrite("data/output_images/saved_dog_pic.jpg", frame)
                     dog_pic_saved = True
 
+
+        
         #cv2.imshow(win_name, img)
         stop = time.time()
 
