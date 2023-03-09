@@ -1,6 +1,8 @@
 # Dog Detector
 A dog detector built using YOLOV3  and Tensorflow in python. It looks for either dog in the frame and sends me a photo using the Discord API.  Designing to be able to snoop on my dogs, and building it as a Discord bot for a layer of security between my computer of livestreaming data and the internet. 
 
+Code is at a somewhat stable state, so I have added a develop branch. 
+
 <p align="center">
   <img src="/data/output_images/dog_livestream.JPG" />
 </p>
