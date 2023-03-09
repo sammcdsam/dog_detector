@@ -19,13 +19,16 @@ def non_max_suppression(inputs, model_size, max_output_size,
         score_threshold=confidence_threshold
     )
     return boxes, scores, classes, valid_detections
+
 def resize_image(inputs, modelsize):
     inputs= tf.image.resize(inputs, modelsize)
     return inputs
+
 def load_class_names(file_name):
     with open(file_name, 'r') as f:
         class_names = f.read().splitlines()
     return class_names
+
 def output_boxes(inputs,model_size, max_output_size, max_output_size_per_class,
                  iou_threshold, confidence_threshold):
     center_x, center_y, width, height, confidence, classes = \
@@ -39,6 +42,13 @@ def output_boxes(inputs,model_size, max_output_size, max_output_size_per_class,
     boxes_dicts = non_max_suppression(inputs, model_size, max_output_size,
                                       max_output_size_per_class, iou_threshold, confidence_threshold)
     return boxes_dicts
+
+def rescale_frame(frame, percent=75):
+    width = int(frame.shape[1] * percent/ 100)
+    height = int(frame.shape[0] * percent/ 100)
+    dim = (width, height)
+    return cv2.resize(frame, dim, interpolation =cv2.INTER_AREA)
+
 def draw_outputs(img, boxes, objectness, classes, nums, class_names):
     boxes, objectness, classes, nums = boxes[0], objectness[0], classes[0], nums[0]
     boxes=np.array(boxes)

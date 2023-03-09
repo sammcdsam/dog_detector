@@ -8,7 +8,7 @@ import os, glob, cv2
 import matplotlib.pyplot as plt
 import time
 from yolov3 import YOLOv3Net
-from utils import load_class_names, output_boxes, draw_outputs, resize_image
+from utils import load_class_names, output_boxes, draw_outputs, resize_image, rescale_frame
 
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
 assert len(physical_devices) > 0, "Not enough GPU hardware devices available"
@@ -45,8 +45,8 @@ def main():
     frame_size = (vid.get(cv2.CAP_PROP_FRAME_WIDTH),
                   vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
     
-    frame_witdh = int(vid.get(3)/2)
-    frame_height = int(vid.get(4)/2)
+    frame_witdh = int(vid.get(3)/100)
+    frame_height = int(vid.get(4)/100)
 
     size = (frame_witdh, frame_height)
     
@@ -96,12 +96,17 @@ def main():
             if int(classes[0][i]) == 0:
                 person_in_view = True
             
-        if dog_in_view and not person_in_view: 
-            cv2.imwrite("data/output_images/saved_dog_pic.jpg", original_frame)
-            image_list.append(backup_frame)
+        if (dog_in_view and not person_in_view): 
+            frame50 = rescale_frame(backup_frame, percent=50)
+            image_list.append(frame50)
             frame_count += 1
         
-        if frame_count == 20:
+        #save the first image of the frame as an image to be shared. 
+        if frame_count == 1:
+            cv2.imwrite("data/output_images/saved_dog_pic.jpg", original_frame)
+        
+        #create a 3 second gif of the following data
+        if frame_count == 60:
             imageio.mimsave("data/output_images/saved_dog.gif", image_list, fps=20)
             image_list=[]
             frame_count=0
