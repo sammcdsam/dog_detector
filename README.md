@@ -10,7 +10,7 @@ A dog detector built using YOLOV3  and Tensorflow in python. It looks for either
 </p>
 
 ## Does not record people
-Built to not record or save images that have a dog and a person in them. The GIF below is an example of this feature. I finished walking Maggie, wallked in the front door and placed her on the couch. In the GIF you can only see my arm as I walk out of the frame.
+Built to not record or save images that have a dog and a person in them. The GIF below is an example of this feature. I was taking Maggie on her walk and I am only record when walk out of the frame and close the door.
 
 <p align="center">
   <img src="/data/output_images/no_person.gif" alt="animated" />
