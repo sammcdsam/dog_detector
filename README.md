@@ -1,5 +1,5 @@
 # Dog Detector
-A dog detector built using YOLOV3  and Tensorflow in python. It looks for 2 dogs in the frame and sends me a photo using the Discord API.  Designing to be able to snoop on my dogs. 
+A dog detector built using YOLOV3  and Tensorflow in python. It looks for either dog in the frame and sends me a photo using the Discord API.  Designing to be able to snoop on my dogs. 
 
 <p align="center">
   <img src="/data/output_images/dog_livestream.JPG" />
@@ -7,6 +7,13 @@ A dog detector built using YOLOV3  and Tensorflow in python. It looks for 2 dogs
 
 <p align="center">
   <img src="/data/output_images/saved_dog.gif" alt="animated" />
+</p>
+
+## Does not record people
+Built to not record or save images that have a dog and a person in them. The GIF below is an example of this feature. I finished walking Maggie, wallked in the front door and placed her on the couch. In the GIF you can only see my arm as I walk out of the frame.
+
+<p align="center">
+  <img src="/data/output_images/no_person.gif" alt="animated" />
 </p>
 
 ### dog_detector.py
