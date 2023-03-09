@@ -2,7 +2,8 @@
 # We use the keyword 'FROM' to do that.
 # In our example, we want import the python image.
 # So we write 'python' for the image name and 'latest' for the version.
-FROM "ubuntu:bionic"
+#FROM dustynv/jetson-inference:r32.7.1
+FROM ubuntu
 FROM python:latest
 
 #install python and some other libraries
