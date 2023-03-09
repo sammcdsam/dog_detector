@@ -35,10 +35,10 @@ Read in the YOLO config file and create the network in tensorflow based on the c
 Load the model weights and modify them into the Tensorflow wieghts order. 
 
 ## Improvements
-*Train a model on just images of the dogs instead of using a pretrained YOLO model that has ~75 labels for objects.
-*Train a model that can detect which dog is in the frame
-*Implement a method to reduce the amount of time YOLO is running, maybe check for motion of some kind. 
-*Add some form of updated state  so a new picture is shared, but only once every certain amount of time
-*Maybe add a twitter account (but I dont want to pay for the API)
+* Train a model on just images of the dogs instead of using a pretrained YOLO model that has ~75 labels for objects.
+* Train a model that can detect which dog is in the frame
+* Implement a method to reduce the amount of time YOLO is running, maybe check for motion of some kind. 
+* Add some form of updated state  so a new picture is shared, but only once every certain amount of time
+* Maybe add a twitter account (but I dont want to pay for the API)
 
 
