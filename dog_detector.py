@@ -1,4 +1,3 @@
-
 # import the opencv library
 import tensorflow as tf
 import numpy as np
