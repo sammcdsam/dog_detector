@@ -42,5 +42,6 @@ Load the model weights and modify them into the Tensorflow wieghts order.
 * Implement a method to reduce the amount of time YOLO is running, maybe check for motion of some kind. 
 * Add some form of updated state  so a new picture is shared, but only once every certain amount of time
 * Maybe add a twitter account (but I dont want to pay for the API)
+* Remove blurred images of dogs - Where to start?
 
 
