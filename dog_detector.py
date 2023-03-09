@@ -3,6 +3,7 @@
 import tensorflow as tf
 import numpy as np
 import pandas as pd
+import imageio
 import os, glob, cv2
 import matplotlib.pyplot as plt
 import time
@@ -44,10 +45,15 @@ def main():
     frame_size = (vid.get(cv2.CAP_PROP_FRAME_WIDTH),
                   vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
     
-    #initalize a video writer for debugging 
-    result = cv2.VideoWriter('filename.avi', 
-                         cv2.VideoWriter_fourcc(*'MJPG'),
-                         10, frame_size)
+    frame_witdh = int(vid.get(3)/2)
+    frame_height = int(vid.get(4)/2)
+
+    size = (frame_witdh, frame_height)
+    
+
+    #store images to save a gif
+    image_list = []
+    frame_count = 0
     
     #
     while(True):
@@ -58,7 +64,9 @@ def main():
 
         # frame is being over written with the bounding box. I dont want to see the bounding box
         # so I am testing fixes right now
-        backup_frame = frame
+        backup_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+        original_frame = frame
 
         if not ret:
             break
@@ -77,7 +85,7 @@ def main():
             iou_threshold=iou_threshold,
             confidence_threshold=confidence_threshold)
                 
-        img = draw_outputs(frame, boxes, scores, classes, nums, class_names)
+        #img = draw_outputs(frame, boxes, scores, classes, nums, class_names)
 
         # instead of displaying the image on the screen save an image of the dog
         # TODO: do NOT save the image when a person is detected in the frame
@@ -89,11 +97,14 @@ def main():
                 person_in_view = True
             
         if dog_in_view and not person_in_view: 
-            #if not dog_pic_saved:
-            cv2.imwrite("data/output_images/saved_dog_pic.jpg", backup_frame)
-            result.write(frame)
-            #dog_pic_saved = True
-
+            cv2.imwrite("data/output_images/saved_dog_pic.jpg", original_frame)
+            image_list.append(backup_frame)
+            frame_count += 1
+        
+        if frame_count == 20:
+            imageio.mimsave("data/output_images/saved_dog.gif", image_list, fps=20)
+            image_list=[]
+            frame_count=0
 
         
         #cv2.imshow(win_name, img)
@@ -111,7 +122,6 @@ def main():
     
     # After the loop release the cap object
     vid.release()
-    result.release()
     # Destroy all the windows
     cv2.destroyAllWindows()
 

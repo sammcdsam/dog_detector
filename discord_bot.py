@@ -20,4 +20,11 @@ async def dog_detect(ctx):
     response = "Here is the most recent picture of Maggie and Monty!"
     await ctx.send(response, file=discord.File(filepath))
 
+@bot.command(name='gif', help='Uploads the most recent gif of the dogs')
+async def dog_detect(ctx):
+
+    filepath = "data/output_images/saved_dog.gif"
+    response = "Here is a gif of Maggie and Monty!"
+    await ctx.send(response, file=discord.File(filepath))
+
 bot.run(TOKEN)
