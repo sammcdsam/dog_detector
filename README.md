@@ -5,6 +5,9 @@ A dog detector built using YOLOV3  and Tensorflow in python. It looks for 2 dogs
   <img src="/data/output_images/dog_livestream.JPG" />
 </p>
 
+<p align="center">
+  <img src="/data/output_images/saved_dog.gif" alt="animated" />
+</p>
 
 ### dog_detector.py
 Uses OpenCV and YOLOv3 to open a livestreaming camera feed that labels dogs in the frame
