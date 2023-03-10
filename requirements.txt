@@ -1,0 +1,5 @@
+discord.py==2.2.2
+numpy==1.23.5
+opencv-python==4.6.0.66
+#tensorboard==2.11.2
+#tensorflow==2.11.0
