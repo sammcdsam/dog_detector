@@ -18,6 +18,16 @@ Built to not record or save images that have a dog and a person in them. The GIF
   <img src="/data/output_images/no_person.gif" alt="animated" />
 </p>
 
+## Install instructions
+* Clone this repository
+* Create a Discord Bot - https://discordpy.readthedocs.io/en/stable/discord.html
+* Create a .env file at the base of the directory that includes your Discord Bot Token
+* Get the YOLO Weight file from - https://pjreddie.com/media/files/yolov3.weights
+* Place the weight file in weights/
+* Install CUDA/Tensorflow 2 for your PC - I still need to test on Windows
+* Docker file ~might~ work thats still a WIP 
+* Install the requirements - I need to update the file. 
+
 ## About the files
 
 ### dog_detector.py
@@ -40,7 +50,7 @@ Load the model weights and modify them into the Tensorflow wieghts order.
 * Train a model on just images of the dogs instead of using a pretrained YOLO model that has ~75 labels for objects.
 * Train a model that can detect which dog is in the frame
 * Implement a method to reduce the amount of time YOLO is running, maybe check for motion of some kind. 
-* Add some form of updated state  so a new picture is shared, but only once every certain amount of time
+* Add some form of updated state so a new picture is shared, but only once every certain amount of time
 * Maybe add a twitter account (but I dont want to pay for the API)
 * Remove blurred images of dogs - Where to start?
 
