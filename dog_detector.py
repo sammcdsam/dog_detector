@@ -26,8 +26,6 @@ confidence_threshold = 0.5
 cfgfile = 'model_data/yolov3.cfg'
 weightfile = 'weights/yolov3_weights.tf'
 
-
-
 def main():
     # define a video capture object
     vid = cv2.VideoCapture(0)
