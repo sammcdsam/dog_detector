@@ -1,5 +1,6 @@
-
 # import the opencv library
+#!/usr/bin/env python3
+
 import tensorflow as tf
 import numpy as np
 import pandas as pd
@@ -25,8 +26,6 @@ confidence_threshold = 0.5
 cfgfile = 'model_data/yolov3.cfg'
 weightfile = 'weights/yolov3_weights.tf'
 
-
-
 def main():
     # define a video capture object
     vid = cv2.VideoCapture(0)
@@ -41,6 +40,8 @@ def main():
     dog_pic_saved = False
     dog_in_view = False
     person_in_view = False
+    both_dogs = False
+    cat_in_view = False
 
     frame_size = (vid.get(cv2.CAP_PROP_FRAME_WIDTH),
                   vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -73,6 +74,7 @@ def main():
 
         dog_in_view = False
         person_in_view = False
+        both_dogs = False
 
         #predict the objects in the frame and add output boxes to the image using the classes
         resized_frame = tf.expand_dims(frame, 0)
@@ -88,26 +90,48 @@ def main():
         #img = draw_outputs(frame, boxes, scores, classes, nums, class_names)
 
         # instead of displaying the image on the screen save an image of the dog
-        # TODO: do NOT save the image when a person is detected in the frame
-        # TODO: only save images that have both dogs detected
+        # doesnt save the image when a person is detected in the frame
+        # TODO: save images that have both dogs detected
         for i in range(nums[0]):
+            
             if int(classes[0][i]) == 16:
+                #if a dog already found the next classification is the other dog
+                if dog_in_view:
+                    both_dogs = True
+                
+                #single dog in view
                 dog_in_view = True
+            
+            # detect cats
+            if int(classes[0][i]) == 15:
+                cat_in_view = True
+
+            # check for person because I dont want my picture taken all the time. 
             if int(classes[0][i]) == 0:
                 person_in_view = True
             
+        # check for the dog and save the frame to the gif list
         if (dog_in_view and not person_in_view): 
             frame50 = rescale_frame(backup_frame, percent=50)
             image_list.append(frame50)
             frame_count += 1
+
+        #save an image if the camera sees both dogs
+        if both_dogs and not person_in_view:
+            cv2.imwrite("data/output_images/both_dogs.jpg", original_frame)
+
+        # save an image if the camera sees a cat. 
+        # I dont have a cat
+        if both_dogs and not person_in_view:
+            cv2.imwrite("data/output_images/cat.jpg", original_frame)
         
-        #save the first image of the frame as an image to be shared. 
-        if frame_count == 1:
+        #save the first image of the frame as an image to be shared
+        if frame_count == 1 and dog_in_view:
             cv2.imwrite("data/output_images/saved_dog_pic.jpg", original_frame)
         
         #create a 3 second gif of the following data
         if frame_count == 60:
-            imageio.mimsave("data/output_images/saved_dog.gif", image_list, fps=20)
+            imageio.mimsave("data/output_images/saved_dog.gif", image_list, fps=15)
             image_list=[]
             frame_count=0
 

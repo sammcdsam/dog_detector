@@ -49,6 +49,7 @@ def rescale_frame(frame, percent=75):
     dim = (width, height)
     return cv2.resize(frame, dim, interpolation =cv2.INTER_AREA)
 
+# I modified this to only draw boxes around dogs. 
 def draw_outputs(img, boxes, objectness, classes, nums, class_names):
     boxes, objectness, classes, nums = boxes[0], objectness[0], classes[0], nums[0]
     boxes=np.array(boxes)

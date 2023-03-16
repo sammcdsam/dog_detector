@@ -4,23 +4,40 @@ import tensorflow as tf
 from tensorflow.keras import Model
 from tensorflow.keras.layers import BatchNormalization, Conv2D, \
     Input, ZeroPadding2D, LeakyReLU, UpSampling2D
+
+#https://github.com/AlexeyAB/darknet/wiki/CFG-Parameters-in-the-different-layers
+# Function to parse the config file that holds the model information. 
 def parse_cfg(cfgfile):
     with open(cfgfile, 'r') as file:
         lines = [line.rstrip('\n') for line in file if line != '\n' and line[0] != '#']
     holder = {}
     blocks = []
+    
     for line in lines:
+        
+        # lines in the config file that are surrounded by [] are the beginning of a block. 
         if line[0] == '[':
             line = 'type=' + line[1:-1].rstrip()
+            
+            # add the beginning of the block to the block list 
+            # and empty the dictionary that holds the information about the block. 
             if len(holder) != 0:
                 blocks.append(holder)
                 holder = {}
+        
+        # add the block information - batch normalization, size, stride, pad
         key, value = line.split("=")
         holder[key.rstrip()] = value.lstrip()
+    
     blocks.append(holder)
     return blocks
+
+# generate the network using the config file. 
 def YOLOv3Net(cfgfile, model_size, num_classes):
+    
+    # get the network from the config file using the function above
     blocks = parse_cfg(cfgfile)
+    
     outputs = {}
     output_filters = []
     filters = []
@@ -28,7 +45,9 @@ def YOLOv3Net(cfgfile, model_size, num_classes):
     scale = 0
     inputs = input_image = Input(shape=model_size)
     inputs = inputs / 255.0
+    
     for i, block in enumerate(blocks[1:]):
+        
         # If it is a convolutional layer
         if (block["type"] == "convolutional"):
             activation = block["activation"]
@@ -47,9 +66,12 @@ def YOLOv3Net(cfgfile, model_size, num_classes):
                 inputs = BatchNormalization(name='bnorm_' + str(i))(inputs)
             #if activation == "leaky":
                 inputs = LeakyReLU(alpha=0.1, name='leaky_' + str(i))(inputs)
+        
+        # If it is an upsample block
         elif (block["type"] == "upsample"):
             stride = int(block["stride"])
             inputs = UpSampling2D(stride)(inputs)
+        
         # If it is a route layer
         elif (block["type"] == "route"):
             block["layers"] = block["layers"].split(',')
@@ -61,17 +83,23 @@ def YOLOv3Net(cfgfile, model_size, num_classes):
             else:
                 filters = output_filters[i + start]
                 inputs = outputs[i + start]
+        
+        # If it is a shortcut block
         elif block["type"] == "shortcut":
             from_ = int(block["from"])
             inputs = outputs[i - 1] + outputs[i + from_]
+        
         # Yolo detection layer
         elif block["type"] == "yolo":
             mask = block["mask"].split(",")
             mask = [int(x) for x in mask]
+            
+            # intial sizes of bounding boxes
             anchors = block["anchors"].split(",")
             anchors = [int(a) for a in anchors]
             anchors = [(anchors[i], anchors[i + 1]) for i in range(0, len(anchors), 2)]
             anchors = [anchors[i] for i in mask]
+            
             n_anchors = len(anchors)
             out_shape = inputs.get_shape().as_list()
             inputs = tf.reshape(inputs, [-1, n_anchors * out_shape[1] * out_shape[2], \
