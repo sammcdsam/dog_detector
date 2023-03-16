@@ -41,6 +41,7 @@ def main():
     dog_in_view = False
     person_in_view = False
     both_dogs = False
+    cat_in_view = False
 
     frame_size = (vid.get(cv2.CAP_PROP_FRAME_WIDTH),
                   vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -94,12 +95,16 @@ def main():
         for i in range(nums[0]):
             
             if int(classes[0][i]) == 16:
-                #if a dog already found the next class is the other dog
+                #if a dog already found the next classification is the other dog
                 if dog_in_view:
                     both_dogs = True
                 
                 #single dog in view
                 dog_in_view = True
+            
+            # detect cats
+            if int(classes[0][i]) == 15:
+                cat_in_view = True
 
             # check for person because I dont want my picture taken all the time. 
             if int(classes[0][i]) == 0:
@@ -114,6 +119,11 @@ def main():
         #save an image if the camera sees both dogs
         if both_dogs and not person_in_view:
             cv2.imwrite("data/output_images/both_dogs.jpg", original_frame)
+
+        # save an image if the camera sees a cat. 
+        # I dont have a cat
+        if both_dogs and not person_in_view:
+            cv2.imwrite("data/output_images/cat.jpg", original_frame)
         
         #save the first image of the frame as an image to be shared
         if frame_count == 1 and dog_in_view:

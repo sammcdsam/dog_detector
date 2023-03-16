@@ -27,6 +27,25 @@ async def dog_detect(ctx):
     response = "Here is the most recent picture of Maggie and Monty!"
     await ctx.send(response, file=discord.File(filepath))
 
+# Cat Command
+# Sends a picture of a cat. 
+@bot.command(name='cat', help='Uploads the most recent picture of a cat')
+async def dog_detect(ctx):
+
+    filepath = "data/output_images/cat.jpg"
+    response = "BARK BARK BARK BARK!"
+    await ctx.send(response, file=discord.File(filepath))
+
+# both dogs command
+# Sends a picture that detected both dogs. 
+@bot.command(name='both', help='Uploads the most recent picture that detected both dogs')
+async def dog_detect(ctx):
+
+    filepath = "data/output_images/both_dogs.jpg"
+    response = "Best Friends!"
+    await ctx.send(response, file=discord.File(filepath))
+
+
 # GIF Command
 # Send the most recent GIF of the the dogs regardless of if it has been sent before
 @bot.command(name='gif', help='Uploads the most recent gif of the dogs')
